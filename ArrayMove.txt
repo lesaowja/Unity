@@ -1,0 +1,85 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class GamePlay : MonoBehaviour
+{ 
+    [SerializeField] GameObject[] R1;
+    [SerializeField] GameObject[] R2; 
+
+    [SerializeField] int PlayerPosition = 0;
+    [SerializeField] int RoundCheck = 1;
+    float moveRange = 0.1f;
+    Vector3 NextPos;
+    [SerializeField] int MoveCount =0;
+    // Start is called before the first frame update
+    void Start()
+    {
+      R1 = GameObject.FindGameObjectsWithTag("R1"); 
+      // R1안에있는 배열 100개 받아오기 
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.UpArrow)&& PlayerPosition < 90&& MoveCount>0 )
+        {
+            PlayerPosition += 10; 
+            move();
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow)&& PlayerPosition >= 9 && MoveCount > 0)
+        {
+            PlayerPosition -= 10;
+            move();
+        }
+        if (Input.GetKeyDown(KeyCode.LeftArrow)&& PlayerPosition >0 && MoveCount > 0)
+        {
+            PlayerPosition -= 1;
+            move();
+        }
+        if (Input.GetKeyDown(KeyCode.RightArrow)&& PlayerPosition < 99 && MoveCount > 0)
+        {
+            PlayerPosition += 1; 
+            move();
+        }
+        if (Input.GetKeyDown(KeyCode.Space)&& MoveCount ==0)
+        {
+            int rnum = Random.Range(0, 7);
+            MoveCount = rnum;
+
+        }
+    }
+    private void FixedUpdate()
+    {
+        if (this.transform.position == R1[99].transform.position)
+        {
+            R2 = GameObject.FindGameObjectsWithTag("R2");
+            PlayerPosition = 0;
+            RoundCheck++;
+            move();
+        }
+
+
+    }
+    void move()
+    {
+        MoveCount--;
+        switch(RoundCheck)
+        {
+            case 1:
+                this.transform.position = new Vector3(R1[PlayerPosition].transform.position.x, R1[PlayerPosition].transform.position.y, R1[PlayerPosition].transform.position.z);
+                // 움직이며 선택된 숫자의 배열칸 위치 받아오기 
+	    Debug.Log(R1[PlayerPosition]);
+                break;
+            case 2:
+                this.transform.position = new Vector3(R2[PlayerPosition].transform.position.x, R2[PlayerPosition].transform.position.y, R2[PlayerPosition].transform.position.z);
+                Debug.Log(R1[PlayerPosition]);
+                break;
+        }
+      
+
+     
+
+    }
+    
+}
